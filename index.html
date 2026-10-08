@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TIG Cassa">
+<link rel="apple-touch-icon" href="icon.png">
+<title>TIG · Cassa</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap">
+<style>
+:root{--bg:#F6F7EC;--sf:#E9EDDA;--ink:#2B4530;--mu:#6A7D6B;--ac:#35603B;--on:#F6F7EC;--dn:#9A3B2E;--ln:#CFD6BC;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121813;--sf:#1D261E;--ink:#E4EAD6;--mu:#93A494;--ac:#A8CB9A;--on:#121813;--dn:#E08A7A;--ln:#2D3A2E}}
+:root[data-theme="dark"]{--bg:#121813;--sf:#1D261E;--ink:#E4EAD6;--mu:#93A494;--ac:#A8CB9A;--on:#121813;--dn:#E08A7A;--ln:#2D3A2E}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.35 system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;touch-action:manipulation;overflow:hidden}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.s{font-family:'Libre Baskerville',Georgia,serif}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;gap:8px}
+header b{font-size:18px}
+nav{display:flex;background:var(--sf);border-radius:12px;padding:3px}
+nav button{padding:9px 11px;border-radius:10px;min-height:44px;font-weight:600;font-size:15px}
+nav .on{background:var(--ac);color:var(--on)}
+#v1{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:0 14px 10px;overflow:auto}
+#v0,#v2{flex:1;overflow:auto;padding:0 14px 24px}
+.tile{flex:1 0 84px;background:var(--sf);border-radius:18px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;text-align:left;border:2px solid transparent;transition:transform .08s}
+.tile:active{transform:scale(.97)}
+.tile.has{border-color:var(--ac)}
+.tile h2{margin:0;font-size:21px;font-weight:400}
+.tile small{display:block;color:var(--mu);font-size:15px;margin-top:3px}
+.sub{color:var(--ac);font-weight:700}.neg{color:var(--dn);font-weight:700}
+.q{display:flex;align-items:center;gap:12px}
+.q em{font-style:normal;font-size:52px;font-weight:700;min-width:44px;text-align:right;font-variant-numeric:tabular-nums}
+.q .m{width:52px;height:52px;border-radius:26px;background:var(--bg);font-size:30px;line-height:1;border:2px solid var(--ln)}
+.tile:not(.has) .m{visibility:hidden}
+#bar{padding:12px 14px 10px;border-top:1px solid var(--ln);display:grid;gap:6px}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.row input{flex:1;min-width:0}
+.tot{font-size:34px;font-weight:700;font-variant-numeric:tabular-nums}
+.seg{display:flex;background:var(--sf);border-radius:12px;padding:3px}
+.seg button{padding:8px 16px;min-height:44px;border-radius:10px;font-weight:600}
+.seg .on{background:var(--ink);color:var(--bg)}
+.btn{min-height:60px;border-radius:16px;background:var(--ac);color:var(--on);font-size:20px;font-weight:700;padding:0 20px;flex:1}
+.btn.g{background:var(--sf);color:var(--ink);flex:0 0 auto;font-size:17px}
+.btn:disabled{opacity:.35}
+.lk{color:var(--mu);text-decoration:underline;min-height:44px;padding:0 6px}
+.lk:disabled{opacity:.35}
+.card{background:var(--sf);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:18px}
+.big{font-size:40px;font-weight:700}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--ln)}
+.kv:first-of-type{border-top:0}
+.sale{padding:10px 0;border-top:1px solid var(--ln);display:flex;justify-content:space-between;gap:10px}
+.sale p{margin:2px 0 0;color:var(--mu);font-size:15px}
+.del{color:var(--dn);min-height:44px;padding:0 8px}
+label{display:grid;gap:4px;color:var(--mu);font-size:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+input,textarea{font:inherit;font-size:18px;width:100%;padding:12px;border-radius:12px;border:2px solid var(--ln);background:var(--bg);color:var(--ink)}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:5}
+#sheet>div{background:var(--bg);width:100%;border-radius:22px 22px 0 0;padding:18px 14px calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;max-height:92%;overflow:auto}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{background:var(--sf);border-radius:12px;min-height:48px;padding:0 16px;font-weight:700}
+#toast{position:fixed;left:14px;right:14px;top:calc(60px + env(safe-area-inset-top,0px));background:var(--ink);color:var(--bg);border-radius:14px;padding:6px 8px 6px 16px;display:flex;justify-content:space-between;align-items:center;z-index:9;min-height:44px}
+#toast button{color:var(--bg);font-weight:700;text-decoration:underline;min-height:44px;padding:0 12px}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.tile{transition:none}}
+</style></head><body>
+<header><b class="s">TIG</b><nav><button id="t0">Allestimento</button><button id="t1">Vendita</button><button id="t2">Chiusura</button></nav></header>
+<section id="v0" hidden></section><main id="v1" hidden></main><section id="v2" hidden></section>
+<footer id="bar" hidden></footer>
+<div id="sheet" hidden></div><div id="toast" hidden></div>
+<script>
+const $=i=>document.getElementById(i),N=x=>+x||0;
+const f=n=>(Math.round(n*100)/100).toLocaleString('it-IT',{maximumFractionDigits:2})+' €';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const K='tig-v2';let D={day:{fl:'',pr:[],sales:[]},arch:[]},cart={},meth='Contanti',tab=0,tm,wl;
+try{const x=JSON.parse(localStorage.getItem(K));if(x&&x.day)D=x}catch(e){}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+const sv=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){toast('Memoria piena: copia il backup')}};
+const dy=()=>D.day,P=()=>D.day.pr;
+if(!P().length)D.day.pr=[{id:1,n:"Cartolina d'autore",pz:'',u:'6',bn:'',bp:''},{id:2,n:'Postcard',pz:'',u:'3',bn:'3',bp:'8'},{id:3,n:'Bookmark',pz:'',u:'4',bn:'3',bp:'10'}];
+const pr=(p,q)=>{const u=N(p.u),b=N(p.bn),c=N(p.bp);return b>1&&c>0?Math.floor(q/b)*c+(q%b)*u:q*u};
+const lines=q=>P().filter(p=>q[p.id]>0).map(p=>[p.id,p.n,q[p.id],pr(p,q[p.id]),p.u]);
+const lst=q=>lines(q).reduce((s,l)=>s+l[3],0),nq=q=>Object.values(q).reduce((s,v)=>s+v,0);
+const sold=id=>dy().sales.reduce((s,x)=>s+x.l.reduce((a,l)=>a+(l[0]==id?l[2]:0),0),0);
+const desc=l=>l.map(x=>x[2]+'× '+x[1]).join(', ');
+const bs=l=>l[4]!=null?l[2]*N(l[4]):l[3],base=x=>x.l.reduce((a,l)=>a+bs(l),0),mn=x=>x>0?'−'+f(x):f(0);
+const dtx=x=>{const o=base(x)-x.list,d=x.list-x.paid;return[o>0&&`offerta quantità −${f(o)}`,d>0&&`sconto −${f(d)}`,d<0&&`maggiorazione +${f(-d)}`].filter(Boolean).join(' · ')};
+const ptxt=p=>f(N(p.u))+' l\'uno'+(N(p.bn)>1&&N(p.bp)>0?' · '+p.bn+' pezzi '+f(N(p.bp)):'');
+if(P().some(p=>N(p.pz)>0)||dy().sales.length)tab=1;
+function toast(t,u){const e=$('toast');e.hidden=false;e.innerHTML=`<span>${t}</span>${u?'<button>Annulla</button>':''}`;if(u)e.querySelector('button').onclick=()=>{u();e.hidden=true};clearTimeout(tm);tm=setTimeout(()=>e.hidden=true,u?8000:2500)}
+function cp(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copiato'),()=>{navigator.share?navigator.share({text:t}).catch(()=>{}):toast('Copia non riuscita')})}
+function setup(){const d=dy(),inp=(p,k,l,m)=>`<label>${l}<input data-i="${p.id}" data-f="${k}" type="number" inputmode="${m}" value="${esc(p[k])}"></label>`;
+$('v0').innerHTML=`<div class="card"><h3 class="s">Allestimento</h3><p style="margin:0;color:var(--mu)">Cosa porti oggi, quanti pezzi, a che prezzo e con quale offerta. Poi tocca Inizia a vendere.</p></div>`
++d.pr.map(p=>`<div class="card"><div class="row"><input data-i="${p.id}" data-f="n" value="${esc(p.n)}" placeholder="Nome prodotto" style="font-weight:700"><button class="del" data-dp="${p.id}">Elimina</button></div>
+<div class="g2">${inp(p,'pz','Quantità portata','numeric')}${inp(p,'u','Prezzo €','decimal')}</div>
+<div class="g2">${inp(p,'bn','Offerta: n. pezzi','numeric')}${inp(p,'bp','Offerta: prezzo totale €','decimal')}</div></div>`).join('')
++`<div class="card"><label>Fondo cassa iniziale €<input id="fl" type="number" inputmode="decimal" value="${esc(d.fl)}"></label></div>
+<button class="btn g" id="addp" ${d.pr.length>=10?'disabled':''} style="width:100%;margin-bottom:10px">+ Aggiungi prodotto (${d.pr.length}/10)</button><button class="btn" id="start" style="width:100%">Inizia a vendere</button>`}
+function tiles(){const L=P().filter(p=>p.n.trim());$('v1').innerHTML=L.length?L.map(p=>{const q=cart[p.id]||0,v=pr(p,q),rest=N(p.pz)-sold(p.id)-q;
+return `<div class="tile ${q?'has':''}" role="button" tabindex="0" data-a="${p.id}"><div><h2 class="s">${esc(p.n)}</h2><small>${q?`<span class="sub">${f(v)}</span>${v<q*N(p.u)?' · offerta applicata':''}`:ptxt(p)}${N(p.pz)?` · <span class="${rest<0?'neg':''}">restano ${rest}</span>`:''}</small></div><div class="q"><button class="m" data-m="${p.id}" aria-label="Togli uno ${esc(p.n)}">−</button><em>${q}</em></div></div>`}).join(''):'<p style="color:var(--mu)">Nessun prodotto. Vai in Allestimento.</p>'}
+function bar(){const l=lst(cart),n=nq(cart);$('bar').hidden=tab!=1;
+$('bar').innerHTML=`<div class="row"><div><small style="color:var(--mu)">${n?n+(n==1?' pezzo':' pezzi'):'Tocca i prodotti'}</small><div class="tot">${f(l)}</div></div><div class="seg"><button class="${meth=='Contanti'?'on':''}" data-p="Contanti">Contanti</button><button class="${meth=='Carta'?'on':''}" data-p="Carta">Carta</button></div></div>
+<div class="row"><button class="btn g" id="adj" ${n?'':'disabled'}>Sconto / nota</button><button class="btn" id="go" ${n?'':'disabled'}>Incassa ${f(l)}</button></div><div class="row"><button class="lk" id="clr" ${n?'':'disabled'}>Svuota</button></div>`}
+function sell(q,paid,mm,note){const L=lines(q),A=dy().sales,s={id:Date.now(),n:A.length?A[A.length-1].n+1:1,t:new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}),l:L,list:lst(q),paid,m:mm,note};
+A.push(s);sv();const old={...cart},om=meth;cart={};meth='Contanti';draw();
+toast(`Vendita ${s.n} registrata · ${f(paid)}`,()=>{dy().sales=dy().sales.filter(x=>x.id!=s.id);sv();cart=old;meth=om;draw()})}
+function sheet(s){const sh=$('sheet'),q=s?Object.fromEntries(s.l.map(l=>[l[0],l[2]])):{...cart};let m=s?s.m:meth,pv=s?s.paid:lst(q),nv=s?s.note:'',au=!s||s.paid==s.list,rr;
+const R=()=>{const l=lst(q);sh.hidden=false;
+sh.innerHTML=`<div><div class="row"><b class="s">${s?'Modifica vendita #'+s.n:'Sconto / nota'}</b><button class="lk" id="cl">Chiudi</button></div>
+${P().filter(p=>p.n.trim()).map(p=>`<div class="row"><span class="s">${esc(p.n)}</span><span class="q"><button class="m" data-q="${p.id}" data-s="-1" aria-label="Togli">−</button><em style="font-size:34px">${q[p.id]||0}</em><button class="m" data-q="${p.id}" data-s="1" aria-label="Aggiungi">+</button></span></div>`).join('')}
+<div>Listino ${f(l)} — incassato:</div><input id="pd" type="number" inputmode="decimal" step="0.5" min="0" value="${pv}">
+<div class="chips">${[1,2,3,5].map(k=>`<button data-d="${k}">−${k} €</button>`).join('')}<button data-d="${l}">Regalo</button></div><div id="df" style="color:var(--mu)"></div>
+<div class="seg">${['Contanti','Carta'].map(k=>`<button data-pm="${k}" class="${m==k?'on':''}" style="flex:1">${k}</button>`).join('')}</div>
+<textarea id="nt" rows="3" placeholder="Nota (es. sconto 3 € cliente simpatico). Puoi dettare con il microfono della tastiera.">${esc(nv)}</textarea>
+<div class="row"><button class="btn g" id="mic" hidden>🎤 Detta</button><button class="btn" id="ok" ${nq(q)?'':'disabled'}>${s?'Salva modifiche':'Registra vendita'}</button></div></div>`;
+const pd=$('pd'),up=()=>{const d=l-N(pv);$('df').textContent=d>0?`Sconto di ${f(d)}`:d<0?`Maggiorazione di ${f(-d)}`:'Nessuno sconto'};up();
+pd.oninput=()=>{pv=pd.value;au=false;up()};$('nt').oninput=e=>{nv=e.target.value};
+sh.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{const k=b.dataset.q;q[k]=Math.max(0,(q[k]||0)+ +b.dataset.s);if(au)pv=lst(q);R()});
+sh.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{pv=Math.max(0,l-b.dataset.d);au=false;R()});
+sh.querySelectorAll('[data-pm]').forEach(b=>b.onclick=()=>{m=b.dataset.pm;R()});
+$('cl').onclick=()=>{sh.hidden=true};
+$('ok').onclick=()=>{const v=Math.max(0,N(pv)),L=lines(q);sh.hidden=true;if(s){Object.assign(s,{l:L,list:lst(q),paid:v,m,note:nv.trim()});sv();draw()}else sell(q,v,m,nv.trim())};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){const mb=$('mic');mb.hidden=false;mb.onclick=()=>{if(rr){rr.stop();return}rr=new SR();rr.lang='it-IT';rr.onresult=e=>{nv=(nv+' '+e.results[0][0].transcript).trim();R()};rr.onend=()=>{rr=null;const b=$('mic');if(b)b.textContent='🎤 Detta'};rr.onerror=()=>{};mb.textContent='⏹ Ascolto…';rr.start()}}};R()}
+function rep(){const A=dy().sales,pa=A.reduce((s,x)=>s+x.paid,0),li=A.reduce((s,x)=>s+x.list,0),co=A.filter(x=>x.m=='Contanti').reduce((s,x)=>s+x.paid,0);return{A,pa,li,co,ca:pa-co,fl:N(dy().fl),ba:A.reduce((s,x)=>s+base(x),0)}}
+const prow=p=>{const s=sold(p.id),pz=N(p.pz),v=dy().sales.reduce((a,x)=>a+x.l.reduce((b,l)=>b+(l[0]==p.id?l[3]:0),0),0);return{p,s,pz,v,rest:pz-s}};
+const dif=x=>{if(x.p.ct===''||x.p.ct==null)return'';const d=N(x.p.ct)-x.rest;return d==0?'torna ✓':d<0?`mancano ${-d} pz`:`${d} pz in più`};
+function txt(){const r=rep();return `TIG · Chiusura ${new Date().toLocaleDateString('it-IT')}\nVendite: ${r.A.length} · Incassato: ${f(r.pa)}\nPrezzo pieno: ${f(r.ba)} · Offerte quantità: ${mn(r.ba-r.li)} · Sconti/omaggi: ${mn(r.li-r.pa)}\nContanti: ${f(r.co)} · Carta: ${f(r.ca)}\nCassa attesa (fondo ${f(r.fl)} + contanti): ${f(r.fl+r.co)}\n\n`+P().filter(p=>p.n.trim()).map(prow).map(x=>`${x.p.n}: venduti ${x.s}${x.pz?` su ${x.pz}, restano ${x.rest}`:''}${dif(x)?`, rimasti contati ${x.p.ct} (${dif(x)})`:''} (${f(x.v)} a listino)`).join('\n')+'\n\nSconti applicati:\n'+(r.A.filter(dtx).map(x=>`#${x.n} ${x.t}: ${dtx(x)}`).join('\n')||'—')+'\n\nNote:\n'+(r.A.filter(x=>x.note).map(x=>`#${x.n} ${x.t} ${f(x.paid)}: ${x.note}`).join('\n')||'—')}
+function day(){const r=rep(),n=r.A.length,kv=(a,b)=>`<div class="kv"><span>${a}</span><b>${b}</b></div>`;
+$('v2').innerHTML=`<div class="card"><h3>Incassato oggi</h3><div class="big">${f(r.pa)}</div><div style="color:var(--mu)">${n} vendite${n?' · scontrino medio '+f(r.pa/n):''}</div></div>
+<div class="card"><h3>Quadratura</h3>${kv('Prezzo pieno',f(r.ba))}${kv('Offerte quantità',mn(r.ba-r.li))}${kv('Sconti manuali e omaggi',mn(r.li-r.pa))}${kv('Incassato',f(r.pa))}${kv('Contanti',f(r.co))}${kv('Carta',f(r.ca))}${kv('Fondo cassa iniziale',f(r.fl))}${kv('In cassa dovresti avere',f(r.fl+r.co))}</div>
+<div class="card"><h3>Pezzi e giacenza</h3><p style="margin:0 0 6px;color:var(--mu);font-size:15px">A fine giornata conta i pezzi rimasti sul banco e scrivili a destra: l'app li confronta con quelli che dovrebbero esserci.</p>${P().filter(p=>p.n.trim()).map(prow).map(x=>`<div class="kv" style="align-items:center"><span>${esc(x.p.n)}<br><small style="color:var(--mu)">venduti ${x.s}${x.pz?` di ${x.pz} · dovrebbero restarne ${x.rest}`:''} · ${f(x.v)}</small></span>${x.pz?`<span style="text-align:right"><input data-ct="${x.p.id}" type="number" inputmode="numeric" placeholder="rimasti" value="${esc(x.p.ct)}" style="width:96px;text-align:right"><br><small id="df${x.p.id}" style="color:var(--mu)">${dif(x)}</small></span>`:'<small style="color:var(--mu);text-align:right">imposta la quantità in Allestimento</small>'}</div>`).join('')}</div>
+<div class="row" style="margin-bottom:12px"><button class="btn" id="cp">Copia report</button></div>
+<div class="card"><h3>Vendite</h3>${n?'<p style="margin:0 0 4px;color:var(--mu);font-size:15px">Tocca una vendita per modificarla.</p>'+r.A.slice().reverse().map(x=>`<div class="sale"><div data-e="${x.id}" style="flex:1"><b>#${x.n}</b> · ${x.t} · ${x.m}<p>${esc(desc(x.l))}</p>${dtx(x)?`<p style="color:var(--ac);font-weight:700">Prezzo pieno ${f(base(x))} · ${dtx(x)}</p>`:''}${x.note?`<p>📝 ${esc(x.note)}</p>`:''}</div><div style="text-align:right"><b>${f(x.paid)}</b><br><button class="del" data-x="${x.id}">Elimina</button></div></div>`).join(''):'<p style="color:var(--mu)">Nessuna vendita ancora. Vai in Vendita e tocca un prodotto.</p>'}</div>
+${D.arch.length?`<div class="card"><h3>Giornate chiuse</h3>${D.arch.map((a,i)=>`<div class="kv" style="align-items:center"><span>${esc(a.d)} · ${f(a.tot)}</span><button class="lk" data-ar="${i}">Copia report</button></div>`).join('')}</div>`:''}
+<div class="row" style="margin-bottom:8px"><button class="btn g" id="cb">Copia backup</button><button class="btn g" id="rb">Ripristina</button></div>
+${n?'<button class="lk" id="nd">Chiudi la giornata e ricomincia</button>':''}`}
+async function wake(){try{if(tab==1&&'wakeLock'in navigator&&!wl){wl=await navigator.wakeLock.request('screen');wl.onrelease=()=>{wl=null}}}catch(e){}}
+function draw(){['v0','v1','v2'].forEach((v,i)=>{$(v).hidden=tab!=i;$('t'+i).className=tab==i?'on':''});if(tab==0)setup();else if(tab==1)tiles();else day();bar();wake()}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake()});
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;if(d.f){P().find(p=>p.id==d.i)[d.f]=t.value;sv()}else if(d.ct){const p=P().find(p=>p.id==d.ct);p.ct=t.value;sv();$('df'+p.id).textContent=dif(prow(p))}else if(t.id=='fl'){dy().fl=t.value;sv()}});
+document.addEventListener('click',e=>{const g=s=>e.target.closest(s);let x;
+if(x=g('[data-m]')){e.stopPropagation();cart[x.dataset.m]=Math.max(0,(cart[x.dataset.m]||0)-1);draw();return}
+if(x=g('[data-a]')){cart[x.dataset.a]=(cart[x.dataset.a]||0)+1;draw();return}
+if(x=g('[data-p]')){meth=x.dataset.p;bar();return}
+if(x=g('[data-e]')){sheet(dy().sales.find(s=>s.id==x.dataset.e));return}
+if(x=g('[data-x]')){if(confirm('Eliminare questa vendita?')){dy().sales=dy().sales.filter(s=>s.id!=x.dataset.x);sv();day()}return}
+if(x=g('[data-dp]')){const id=x.dataset.dp;if(sold(id))alert('Questo prodotto ha già delle vendite: non si può eliminare.');else if(confirm('Eliminare il prodotto?')){D.day.pr=P().filter(p=>p.id!=id);sv();setup()}return}
+if(x=g('[data-ar]')){cp(D.arch[x.dataset.ar].rep);return}
+const id=(g('button')||{}).id,A={t0:()=>{tab=0;draw()},t1:()=>{tab=1;draw()},t2:()=>{tab=2;draw()},
+go:()=>sell({...cart},lst(cart),meth,''),adj:()=>sheet(),clr:()=>{cart={};draw()},
+addp:()=>{if(P().length<10){P().push({id:Date.now(),n:'',pz:'',u:'',bn:'',bp:''});sv();setup()}},
+start:()=>{tab=1;draw()},cp:()=>cp(txt()),cb:()=>cp(JSON.stringify(D)),
+rb:()=>{const t=prompt('Incolla qui il backup copiato in precedenza');if(!t)return;try{const o=JSON.parse(t);if(!o.day)throw 0;D=o;sv();cart={};tab=1;draw();toast('Backup ripristinato')}catch(_){alert('Backup non valido')}},
+nd:()=>{if(confirm('Chiudere la giornata? Il report viene archiviato e si riparte dall\'Allestimento.')){const r=rep();D.arch.push({d:new Date().toLocaleDateString('it-IT'),tot:r.pa,rep:txt()});D.day={fl:'',pr:P().map(p=>({...p,pz:'',ct:''})),sales:[]};cart={};sv();tab=0;draw()}}};
+if(A[id])A[id]()});
+document.addEventListener('keydown',e=>{if((e.key=='Enter'||e.key==' ')&&e.target.dataset.a){e.preventDefault();e.target.click()}});
+try{navigator.serviceWorker&&navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
+draw();
+</script></body></html>
